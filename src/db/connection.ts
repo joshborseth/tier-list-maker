@@ -1,5 +1,4 @@
 import { drizzle } from "drizzle-orm/planetscale-serverless";
-import { cities } from "./schema";
 import { connect } from "@planetscale/database";
 
 // create the connection
@@ -10,7 +9,3 @@ const connection = connect({
 });
 
 export const db = drizzle(connection);
-
-const allCities = await db.select().from(cities);
-
-console.log(allCities);
