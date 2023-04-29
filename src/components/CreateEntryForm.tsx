@@ -2,10 +2,10 @@ import { useRef } from "react";
 import { api } from "~/utils/api";
 import FileUploadSharpIcon from "@mui/icons-material/FileUploadSharp";
 export default function CreateEntryForm() {
-  //TODO: Refactor to upload image on submit instead of onChange
   const entryMutation = api.entry.create.useMutation();
-  const uploadPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+
+  const createEntry = async () => {
+    const file = fileInputRef.current?.files?.[0];
     const filename = file?.name;
     const fileType = file?.type;
     if (!file || !filename || !fileType) throw new Error("No file selected.");
@@ -30,13 +30,14 @@ export default function CreateEntryForm() {
       throw new Error("Upload failed.");
     }
   };
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   return (
-    <form>
+    <form onSubmit={() => void createEntry()}>
       <div className="flex items-center justify-center gap-5">
         <button
           type="button"
-          className="flex items-center justify-center gap-2 rounded-md border border-gray-100 bg-white p-4 shadow-md"
+          className="flex items-center justify-center gap-2 rounded-md border border-gray-100 bg-white p-4 shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
           onClick={() => fileInputRef.current?.click()}
         >
           <label
@@ -53,7 +54,6 @@ export default function CreateEntryForm() {
           hidden
           type="file"
           accept="image/png, image/jpeg, application/pdf"
-          onChange={(e) => void uploadPhoto(e)}
         />
       </div>
     </form>
