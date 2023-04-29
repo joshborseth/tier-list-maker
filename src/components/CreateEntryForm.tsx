@@ -48,7 +48,7 @@ export default function CreateEntryForm() {
       headers: { "Content-Type": fileType },
     });
     if (upload.ok) {
-      if (!process.env.NEXT_PUBLIC_S3_URL) throw new Error("No S3 URL");
+      if (!process.env.NEXT_PUBLIC_S3_URL) throw new Error("No S3 URL In ENV");
       const s3FileUrl = `${process.env.NEXT_PUBLIC_S3_URL}${filename}`;
       entryMutation.mutate(
         {
@@ -76,29 +76,38 @@ export default function CreateEntryForm() {
   };
   return (
     <form
+      className="m-5 flex flex-col items-center justify-center rounded-lg p-10 shadow-md"
       onSubmit={(...args) =>
         void handleSubmit(onSubmit, onSubmitError)(...args)
       }
     >
-      <label
-        htmlFor="file"
-        className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-100 bg-white p-4 text-sm font-bold uppercase shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
-      >
-        <span>File Upload</span>
-        <FileUploadSharpIcon />
-      </label>
-
       <input
-        {...register("fileList")}
-        id="file"
-        type="file"
-        accept={ACCEPTED_FILE_TYPES.join(", ")}
+        className="border-2 border-gray-700"
+        {...register("description")}
       />
-      <input className="border-2" {...register("description")} />
-      <input className="border-2" {...register("name")} />
-      <button type="submit" className="border-2 bg-red-100">
-        submit
-      </button>
+      <input className="border-2 border-gray-700" {...register("name")} />
+      <div className="flex gap-5 pt-10">
+        <label
+          htmlFor="file"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-100 bg-white p-4 text-sm font-bold uppercase shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
+        >
+          <span className="text-gray-700">File Upload</span>
+          <FileUploadSharpIcon className="fill-gray-700" />
+        </label>
+        <input
+          hidden
+          {...register("fileList")}
+          id="file"
+          type="file"
+          accept={ACCEPTED_FILE_TYPES.join(", ")}
+        />
+        <button
+          type="submit"
+          className="rounded-lg border border-gray-100 p-4 text-sm font-bold uppercase text-gray-700 shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 }
