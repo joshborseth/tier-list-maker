@@ -17,9 +17,9 @@ const Home: NextPage = () => {
       headers: { "Content-Type": fileType },
     });
     if (upload.ok) {
-      const s3FileUrl = `https://snuggly-folks.s3.us-west-2.amazonaws.com/${filename}`;
+      if (!process.env.NEXT_PUBLIC_S3_URL) throw new Error("No S3 URL");
+      const s3FileUrl = `${process.env.NEXT_PUBLIC_S3_URL}${filename}`;
       console.log(s3FileUrl);
-      //TODO: send s3FileUrl to backend to be added to the database
     } else {
       throw new Error("Upload failed.");
     }
