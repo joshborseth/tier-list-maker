@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
-    "**/*.mjs"
+    "**/*.mjs",
+    "src/db/drizzle.config.json"
   ],
   "exclude": ["node_modules"]
 }
