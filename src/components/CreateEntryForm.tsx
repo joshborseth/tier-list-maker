@@ -15,7 +15,14 @@ const ACCEPTED_FILE_TYPES = [
 const formSchema = z.object({
   name: z.string().nonempty(),
   description: z.string().nonempty(),
-  file: z.custom<File>(),
+  fileList: z.custom<FileList>().refine(
+    (fileList) => {
+      return Array.from(fileList)[0];
+    },
+    {
+      message: "No file selected",
+    }
+  ),
 });
 type FormSchema = z.infer<typeof formSchema>;
 
@@ -24,9 +31,11 @@ export default function CreateEntryForm() {
 
   const onSubmit: SubmitHandler<FormSchema> = async ({
     description,
-    file,
+    fileList,
     name,
   }) => {
+    const file = Array.from(fileList)[0];
+    if (!file) throw new Error("No file");
     const filename = file?.name;
     const fileType = file?.type;
     const res = await fetch(
@@ -80,7 +89,7 @@ export default function CreateEntryForm() {
       </label>
 
       <input
-        {...register("file")}
+        {...register("fileList")}
         id="file"
         type="file"
         accept={ACCEPTED_FILE_TYPES.join(", ")}
