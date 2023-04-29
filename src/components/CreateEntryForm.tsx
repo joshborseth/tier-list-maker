@@ -76,17 +76,26 @@ export default function CreateEntryForm() {
   };
   return (
     <form
-      className="m-5 flex flex-col items-center justify-center rounded-lg p-10 shadow-md"
+      className="m-5 flex flex-col items-center justify-center gap-2 rounded-lg p-10 text-sm font-bold uppercase shadow-md"
       onSubmit={(...args) =>
         void handleSubmit(onSubmit, onSubmitError)(...args)
       }
     >
+      <p className="text-2xl">Snuggler Entry</p>
+      <label htmlFor="name">Name:</label>
       <input
-        className="border-2 border-gray-700"
+        id="name"
+        className="rounded-lg border border-gray-700 px-4 py-2 shadow-md"
+        {...register("name")}
+      />
+      <label htmlFor="description">Description:</label>
+      <input
+        id="description"
+        className="rounded-lg border border-gray-700 px-4 py-2 shadow-md"
         {...register("description")}
       />
-      <input className="border-2 border-gray-700" {...register("name")} />
-      <div className="flex gap-5 pt-10">
+
+      <div className="flex gap-5 pt-2">
         <label
           htmlFor="file"
           className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-100 bg-white p-4 text-sm font-bold uppercase shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
