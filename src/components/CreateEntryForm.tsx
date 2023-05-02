@@ -9,7 +9,6 @@ const ACCEPTED_FILE_TYPES = [
   "image/jpg",
   "image/png",
   "image/webp",
-  "application/pdf",
 ];
 
 const formSchema = z.object({
@@ -67,7 +66,7 @@ export default function CreateEntryForm() {
     }
   };
 
-  const { handleSubmit, register } = useForm<FormSchema>({
+  const { handleSubmit, register, watch } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
   });
 
@@ -76,12 +75,12 @@ export default function CreateEntryForm() {
   };
   return (
     <form
-      className="m-5 flex flex-col items-center justify-center gap-2 rounded-lg p-10 text-sm font-bold uppercase shadow-md"
+      className="m-5 flex w-80 flex-col items-center justify-center gap-2 rounded-lg bg-white px-4 py-8 text-sm font-bold uppercase text-gray-700 shadow-lg"
       onSubmit={(...args) =>
         void handleSubmit(onSubmit, onSubmitError)(...args)
       }
     >
-      <p className="text-2xl">Snuggler Entry</p>
+      <p className="pb-5 text-center text-xl">Add a Snuggler</p>
       <label htmlFor="name">Name:</label>
       <input
         id="name"
@@ -89,16 +88,16 @@ export default function CreateEntryForm() {
         {...register("name")}
       />
       <label htmlFor="description">Description:</label>
-      <input
+      <textarea
         id="description"
-        className="rounded-lg border border-gray-700 px-4 py-2 shadow-md"
+        className="resize-none rounded-lg border border-gray-700 px-4 py-2 shadow-md"
         {...register("description")}
       />
 
-      <div className="flex gap-5 pt-2">
+      <div className="flex flex-col gap-5 pt-2 md:flex-row">
         <label
           htmlFor="file"
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-100 bg-white p-4 text-sm font-bold uppercase shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-700 bg-white p-4 text-sm font-bold uppercase transition-colors duration-200 ease-in-out hover:bg-gray-100"
         >
           <span className="text-gray-700">File Upload</span>
           <FileUploadSharpIcon className="fill-gray-700" />
@@ -112,11 +111,16 @@ export default function CreateEntryForm() {
         />
         <button
           type="submit"
-          className="rounded-lg border border-gray-100 p-4 text-sm font-bold uppercase text-gray-700 shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
+          className="rounded-lg border border-gray-700 p-4 text-sm font-bold uppercase text-gray-700 shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
         >
           Submit
         </button>
       </div>
+      {watch("fileList") && watch("fileList").length > 0 && (
+        <p className="py-4 text-center text-xs">
+          File Selected: {Array.from(watch("fileList"))[0]?.name}
+        </p>
+      )}
     </form>
   );
 }

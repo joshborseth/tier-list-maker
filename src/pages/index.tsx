@@ -12,9 +12,9 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
+      <main className="flex h-full min-h-screen w-full items-center  justify-center">
         <CreateEntryForm />
-      </div>
+      </main>
     </>
   );
 };
