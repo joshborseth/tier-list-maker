@@ -66,7 +66,12 @@ export default function CreateEntryForm() {
     }
   };
 
-  const { handleSubmit, register, watch } = useForm<FormSchema>({
+  const {
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors },
+  } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
   });
 
@@ -74,34 +79,38 @@ export default function CreateEntryForm() {
     console.log(errors, "error");
   };
   return (
-    <form
-      className="m-5 flex w-80 flex-col items-center justify-center gap-2 rounded-lg bg-white px-4 py-8 text-sm font-bold uppercase text-gray-700 shadow-lg"
-      onSubmit={(...args) =>
-        void handleSubmit(onSubmit, onSubmitError)(...args)
-      }
-    >
-      <p className="pb-5 text-center text-xl">Add a Snuggler</p>
-      <label htmlFor="name">Name:</label>
-      <input
-        id="name"
-        className="rounded-lg border border-gray-700 px-4 py-2 shadow-md"
-        {...register("name")}
-      />
-      <label htmlFor="description">Description:</label>
-      <textarea
-        id="description"
-        className="resize-none rounded-lg border border-gray-700 px-4 py-2 shadow-md"
-        {...register("description")}
-      />
-
-      <div className="flex flex-col gap-5 pt-2 md:flex-row">
+    <div className="w-full max-w-md">
+      <form
+        className="flex flex-col gap-2 rounded-lg bg-white p-10 shadow-md"
+        onSubmit={(...args) =>
+          void handleSubmit(onSubmit, onSubmitError)(...args)
+        }
+      >
+        <p className="mb-5 text-lg font-bold">Add a Snuggler</p>
+        <label htmlFor="name">Name:</label>
+        <input className="border-2 p-2" id="name" {...register("name")} />
+        <FormError error={errors.name?.message} />
+        <label htmlFor="description">Description:</label>
+        <textarea
+          className="resize-none border-2 p-2"
+          id="description"
+          {...register("description")}
+        />
+        <FormError error={errors.description?.message} />
+        <div className="py-2" />
         <label
+          className="flex cursor-pointer items-center justify-center rounded-full bg-black px-4 py-2 text-white"
           htmlFor="file"
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-700 bg-white p-4 text-sm font-bold uppercase transition-colors duration-200 ease-in-out hover:bg-gray-100"
         >
-          <span className="text-gray-700">File Upload</span>
-          <FileUploadSharpIcon className="fill-gray-700" />
+          <span>File Upload</span>
+          <FileUploadSharpIcon />
         </label>
+        <FormError error={errors.fileList?.message} />
+        {watch("fileList") && watch("fileList").length > 0 && (
+          <p className="text-xs">
+            File Selected: {Array.from(watch("fileList"))[0]?.name}
+          </p>
+        )}
         <input
           hidden
           {...register("fileList")}
@@ -109,18 +118,17 @@ export default function CreateEntryForm() {
           type="file"
           accept={ACCEPTED_FILE_TYPES.join(", ")}
         />
+
         <button
+          className="cursor-pointer rounded-full bg-black px-4 py-2 text-white"
           type="submit"
-          className="rounded-lg border border-gray-700 p-4 text-sm font-bold uppercase text-gray-700 shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-100"
         >
           Submit
         </button>
-      </div>
-      {watch("fileList") && watch("fileList").length > 0 && (
-        <p className="py-4 text-center text-xs">
-          File Selected: {Array.from(watch("fileList"))[0]?.name}
-        </p>
-      )}
-    </form>
+      </form>
+    </div>
   );
 }
+const FormError = ({ error }: { error?: string }) => {
+  return <>{error && <p className="text-xs text-red-400">{error}</p>}</>;
+};
