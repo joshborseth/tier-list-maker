@@ -19,6 +19,7 @@ export const entryRouter = createTRPCRouter({
     return await db.select().from(entry);
   }),
   //TODO: make this a protected procedure
+  //TODO: delete from the bucket aswell
   delete: publicProcedure
     .input(
       z.object({

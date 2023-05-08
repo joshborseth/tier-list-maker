@@ -107,6 +107,7 @@ export default function CreateEntryForm() {
       <FormError error={errors.name?.message} />
       <label htmlFor="description">Description:</label>
       <textarea
+        maxLength={50}
         className="resize-none border-2 p-2"
         id="description"
         {...register("description")}
